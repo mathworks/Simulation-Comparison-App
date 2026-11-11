@@ -31,6 +31,7 @@ jobs:
         uses: matlab-actions/setup-matlab@v3
         with:
           products: Simulink
+          cache: true
 
       - name: Build toolbox installer
         uses: matlab-actions/run-build@v3
