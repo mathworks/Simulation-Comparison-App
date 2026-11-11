@@ -1,0 +1,184 @@
+{
+  "_schemaVersion": "1.0.0",
+  "runSimulationComparisonApp": {
+    "inputs": [
+      {
+        "name": "BaselineFile",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "MAT-file containing the baseline SimulationData Dataset."
+      },
+      {
+        "name": "CompareFile",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "MAT-file containing the comparison SimulationData Dataset."
+      },
+      {
+        "name": "BaselineRunID",
+        "kind": "namevalue",
+        "type": [
+          "double",
+          "scalar"
+        ],
+        "purpose": "Current Simulation Data Inspector run ID to use as the baseline."
+      },
+      {
+        "name": "CompareRunID",
+        "kind": "namevalue",
+        "type": [
+          "double",
+          "scalar"
+        ],
+        "purpose": "Current Simulation Data Inspector run ID to use as the comparison."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "app",
+        "purpose": "Structure containing the model, ViewModel, and view handles."
+      }
+    ]
+  },
+  "exportSimulationComparisonPlots": {
+    "inputs": [
+      {
+        "name": "baselineFile",
+        "kind": "required",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "MAT-file containing the baseline SimulationData Dataset."
+      },
+      {
+        "name": "compareFile",
+        "kind": "required",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "MAT-file containing the comparison SimulationData Dataset."
+      },
+      {
+        "name": "Signals",
+        "kind": "namevalue",
+        "type": [
+          "string"
+        ],
+        "purpose": "Exact signal names to export; empty exports all comparable signals."
+      },
+      {
+        "name": "OutputFolder",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "Folder that receives one comparison plot per selected signal."
+      },
+      {
+        "name": "Format",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "Output format: png, jpg, tif, pdf, or svg."
+      },
+      {
+        "name": "BaselineDatasetName",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "Dataset variable to use when the baseline file contains multiple datasets."
+      },
+      {
+        "name": "CompareDatasetName",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "Dataset variable to use when the comparison file contains multiple datasets."
+      },
+      {
+        "name": "BaselineLegendText",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "Label appended to the baseline Dataset name in the legend; defaults to Baseline."
+      },
+      {
+        "name": "CompareLegendText",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "Label appended to the comparison Dataset name in the legend; defaults to Comparison."
+      },
+      {
+        "name": "TimeUnit",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "Displayed time unit: s, ms, or µs."
+      },
+      {
+        "name": "ErrorType",
+        "kind": "namevalue",
+        "type": [
+          "string",
+          "scalar"
+        ],
+        "purpose": "Error calculation: Relative (default) or Absolute."
+      },
+      {
+        "name": "TimeShiftSeconds",
+        "kind": "namevalue",
+        "type": [
+          "double",
+          "scalar"
+        ],
+        "purpose": "Time shift applied to comparison signals, in seconds."
+      },
+      {
+        "name": "XLimits",
+        "kind": "namevalue",
+        "type": [
+          "double",
+          "1x2"
+        ],
+        "purpose": "Exported X-axis limits in the selected time unit."
+      },
+      {
+        "name": "Resolution",
+        "kind": "namevalue",
+        "type": [
+          "double",
+          "scalar"
+        ],
+        "purpose": "Resolution in DPI for raster exports."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "exportedFiles",
+        "purpose": "String array containing the generated plot file paths."
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<demos>
+    <name>Simulation Comparison App</name>
+    <type>toolbox</type>
+    <icon>HelpIcon.DEMOS</icon>
+    <description>Compare matching signals from two simulation MAT-files.</description>
+
+    <demosection>
+        <label>Getting Started</label>
+        <demoitem>
+            <label>Getting Started with Simulation Comparison App</label>
+            <type>M-file</type>
+            <source>../doc/GettingStarted</source>
+        </demoitem>
+    </demosection>
+
+    <demosection>
+        <label>App</label>
+        <demoitem>
+            <label>Open the Simulation Comparison App</label>
+            <type>M-file</type>
+            <source>openSimulationComparisonApp</source>
+        </demoitem>
+    </demosection>
+</demos>
