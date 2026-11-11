@@ -32,6 +32,13 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v7
 
+      - name: Start virtual display server
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install -y xvfb
+          Xvfb :99 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
       - name: Cache MATLAB build files
         uses: actions/cache@v6
         with:
