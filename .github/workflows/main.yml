@@ -73,7 +73,7 @@ jobs:
         with:
           name: test-results
           if-no-files-found: error
-          path: results/*.xml
+          path: results/test-results*.xml
 
   publish-test-results:
     needs: check-and-test
