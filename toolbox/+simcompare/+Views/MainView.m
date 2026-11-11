@@ -4,6 +4,11 @@ classdef MainView < handle
 
     properties (SetAccess = private)
         Figure
+        FileMenu
+        ViewMenu
+        ExportMenu
+        FeedbackMenu
+        HelpMenu
         BaselineFileField
         CompareFileField
         BaselineBrowseButton
@@ -47,6 +52,7 @@ classdef MainView < handle
     properties (Access = private)
         ViewModel simcompare.ViewModels.MainViewModel
         Listeners cell = {}
+        ButtonMenus cell = cell(0, 2)
         LastPreviewTick = []
         IsDeleting logical = false
         WarningPresenter function_handle
@@ -324,6 +330,105 @@ classdef MainView < handle
                 obj.createPlotContextMenu(obj.ErrorAxes, false);
             obj.ErrorAxes.ContextMenu = obj.ErrorAxesContextMenu;
             obj.ErrorLine.ContextMenu = obj.ErrorAxesContextMenu;
+            obj.createMenuBar();
+        end
+
+        function createMenuBar(obj)
+            obj.FileMenu = uimenu(obj.Figure, Text="File");
+            baselineMenu = uimenu(obj.FileMenu, Text="Baseline");
+            obj.addButtonMenu(baselineMenu, ...
+                "Load file or SDI session...", obj.BaselineBrowseButton);
+            obj.addButtonMenu(baselineMenu, ...
+                "Choose SDI run...", obj.BaselineSdiButton);
+            obj.addButtonMenu(baselineMenu, ...
+                "Clear source", obj.BaselineClearButton);
+            comparisonMenu = uimenu(obj.FileMenu, Text="Comparison");
+            obj.addButtonMenu(comparisonMenu, ...
+                "Load file or SDI session...", obj.CompareBrowseButton);
+            obj.addButtonMenu(comparisonMenu, ...
+                "Choose SDI run...", obj.CompareSdiButton);
+            obj.addButtonMenu(comparisonMenu, ...
+                "Clear source", obj.CompareClearButton);
+            uimenu(obj.FileMenu, Text="Close", Separator="on", ...
+                MenuSelectedFcn=@(~, ~) delete(obj));
+
+            obj.ViewMenu = uimenu(obj.Figure, Text="View");
+            obj.addButtonMenu(obj.ViewMenu, ...
+                "Reset view", obj.ResetViewButton);
+            obj.addButtonMenu(obj.ViewMenu, ...
+                "Zero time shift", obj.ZeroShiftButton);
+            uimenu(obj.ViewMenu, Text="Edit legend labels...", ...
+                Separator="on", ...
+                MenuSelectedFcn=@(~, ~) obj.runGuarded( ...
+                @() obj.onEditLegendText(), "Edit legend labels"));
+
+            obj.ExportMenu = uimenu(obj.Figure, Text="Export");
+            obj.addButtonMenu(obj.ExportMenu, ...
+                "Select all signals", obj.SelectAllExportButton);
+            obj.addButtonMenu(obj.ExportMenu, ...
+                "Clear selection", obj.ClearExportButton);
+            exportMenu = obj.addButtonMenu(obj.ExportMenu, ...
+                "Export selected to folder...", obj.ExportButton);
+            exportMenu.Separator = "on";
+            obj.addButtonMenu(obj.ExportMenu, ...
+                "Quick export current", obj.QuickExportButton);
+
+            projectURL = simcompare.IssueReporter.ProjectURL;
+            fileExchangeURL = "https://www.mathworks.com/matlabcentral/" + ...
+                "fileexchange/185218-simulation-comparison-app";
+            obj.FeedbackMenu = uimenu(obj.Figure, Text="Feedback");
+            obj.addUrlMenu(obj.FeedbackMenu, "Report a bug", ...
+                projectURL + "/issues/new?template=bug_report.md");
+            obj.addUrlMenu(obj.FeedbackMenu, "Request a feature", ...
+                projectURL + "/issues/new?template=feature_request.md");
+            obj.addUrlMenu(obj.FeedbackMenu, "Write a review", ...
+                fileExchangeURL + "#reviews_tab");
+
+            obj.HelpMenu = uimenu(obj.Figure, Text="Help");
+            uimenu(obj.HelpMenu, Text="Getting started", ...
+                MenuSelectedFcn=@(~, ~) obj.runGuarded( ...
+                @() obj.openGettingStarted(), "Open getting started guide"));
+            obj.addUrlMenu(obj.HelpMenu, "GitHub repository", projectURL);
+            obj.addUrlMenu(obj.HelpMenu, "File Exchange", fileExchangeURL);
+            uimenu(obj.HelpMenu, Text="About Simulation Comparison App", ...
+                Separator="on", ...
+                MenuSelectedFcn=@(~, ~) obj.runGuarded( ...
+                @() obj.showAbout(), "Show app information"));
+        end
+
+        function menu = addButtonMenu(obj, parent, text, button)
+            menu = uimenu(parent, Text=text, Enable=button.Enable, ...
+                MenuSelectedFcn=button.ButtonPushedFcn);
+            obj.ButtonMenus(end + 1, :) = {menu, button};
+        end
+
+        function syncMenuEnabledState(obj)
+            for index = 1:size(obj.ButtonMenus, 1)
+                menu = obj.ButtonMenus{index, 1};
+                button = obj.ButtonMenus{index, 2};
+                menu.Enable = button.Enable;
+            end
+        end
+
+        function addUrlMenu(obj, parent, text, url)
+            uimenu(parent, Text=text, ...
+                MenuSelectedFcn=@(~, ~) obj.runGuarded( ...
+                @() obj.UrlOpener(url), text));
+        end
+
+        function openGettingStarted(~)
+            toolboxFolder = fileparts(fileparts(fileparts( ...
+                mfilename("fullpath"))));
+            open(fullfile(toolboxFolder, "doc", "GettingStarted.m"));
+        end
+
+        function showAbout(obj)
+            uialert(obj.Figure, ...
+                "Simulation Comparison App" + newline + ...
+                "Version " + string(obj.CurrentVersion) + newline + newline + ...
+                "Explore, align, and export signals from simulation " + ...
+                "datasets and Simulation Data Inspector runs.", ...
+                "About Simulation Comparison App", Icon="info");
         end
 
         function createFilePanel(obj, parent)
@@ -800,6 +905,7 @@ classdef MainView < handle
             obj.CompareClearButton.Enable = ...
                 matlab.lang.OnOffSwitchState( ...
                 strlength(obj.ViewModel.CompareFileDisplay) > 0);
+            obj.syncMenuEnabledState();
         end
 
         function updateSignalTable(obj, query)
@@ -911,6 +1017,7 @@ classdef MainView < handle
                 obj.ViewModel.CanExport && ~obj.ViewModel.IsExporting);
             obj.QuickExportButton.Enable = matlab.lang.OnOffSwitchState( ...
                 obj.ViewModel.CanCompare && ~obj.ViewModel.IsExporting);
+            obj.syncMenuEnabledState();
         end
 
         function showFixedPointWarning(obj)

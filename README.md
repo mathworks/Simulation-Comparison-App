@@ -131,6 +131,14 @@ Click the **×** button beside either source to clear it. The signal table and
 plots immediately refresh from the remaining source, or clear completely when
 neither source remains selected.
 
+The top menu bar provides **File** actions for loading and clearing either
+source and closing the app, **View** actions for resetting plots and editing
+legend labels, and **Export** actions using the selected output format.
+**Help** opens the Getting Started guide, project pages, and app version details.
+Choose **Feedback > Report a bug** or **Request a feature** to open the
+corresponding GitHub issue template. **Feedback > Write a review** opens the
+[File Exchange Reviews section](https://www.mathworks.com/matlabcentral/fileexchange/185218-simulation-comparison-app#reviews_tab).
+
 Fixed-point comparison requires an available Fixed-Point Designer&trade;
 license.
 When no license is available, the app displays a warning and keeps fixed-point
