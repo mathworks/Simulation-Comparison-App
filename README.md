@@ -1,5 +1,7 @@
 # Simulation Comparison App
 
+[![CI](https://github.com/mathworks/Simulation-Comparison-App/actions/workflows/main.yml/badge.svg)](https://github.com/mathworks/Simulation-Comparison-App/actions/workflows/main.yml)
+
 Simulation Comparison App is a MATLAB&reg; app for exploring and comparing
 signals in two Simulink&reg; datasets (`Simulink.SimulationData.Dataset`)
 loaded from MAT-files, current Simulation Data Inspector (SDI) runs, or saved
